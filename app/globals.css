@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/* Brand palette — exposed to Tailwind v4 as utilities
+   (bg-umbra, text-resort, text-stone, bg-orange, …) */
+@theme {
+  --color-umbra: #252324; /* near-black */
+  --color-resort: #f4f2e4; /* warm off-white */
+  --color-stone: #c4bfb5; /* muted warm grey */
+  --color-orange: #dd561c; /* accent */
+
+  --font-display: var(--font-petrov), Georgia, serif;
+  --font-body: var(--font-petrov), system-ui, sans-serif;
+  /* default font for the whole site = the brand body font (Petrov),
+     so any text without an explicit font-display/font-body class
+     still renders in Petrov instead of the system sans */
+  --font-sans: var(--font-petrov), system-ui, sans-serif;
+
+  --tracking-luxe: 0.18em;
+  --tracking-wide2: 0.32em;
+
+  --animate-marquee: marquee 32s linear infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-umbra);
+  color: var(--color-resort);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* lightbox video: hide the volume/mute and fullscreen controls
+   (WebKit/Chromium media-control pseudo-elements) */
+.lightbox-video::-webkit-media-controls-mute-button,
+.lightbox-video::-webkit-media-controls-volume-slider,
+.lightbox-video::-webkit-media-controls-volume-control-container,
+.lightbox-video::-webkit-media-controls-fullscreen-button {
+  display: none !important;
+}
