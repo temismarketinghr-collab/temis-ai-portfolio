@@ -48,3 +48,6 @@ next-env.d.ts
 /public/case/
 /public/case-study/3.zip
 /public/video/lilylift-reel-eng-final.mp4
+
+.vercel
+.env*
