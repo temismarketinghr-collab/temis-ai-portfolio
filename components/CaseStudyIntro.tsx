@@ -58,11 +58,10 @@ export default function CaseStudyIntro() {
     offset: ["start start", "end end"],
   });
 
-  // NOTE: all motion hooks must run UNCONDITIONALLY (Rules of Hooks). We split
-  // desktop vs mobile with CSS visibility (not a JS early-return), so the hook
-  // count never changes across the breakpoint. Desktop gets the pinned,
-  // scroll-driven choreography below; mobile renders a plain in-flow card that
-  // can't be clipped by the h-screen stage.
+  // NOTE: all motion hooks must run UNCONDITIONALLY (Rules of Hooks). The same
+  // pinned, scroll-driven choreography runs on BOTH mobile and desktop; only
+  // the card's internal layout is compacted on mobile so the stacked content
+  // (incl. "The Result") fits inside the h-screen stage without being clipped.
 
   // A circle reveals a CRISP, fixed-resolution grid (clip-path, not scale).
   const circleRadius = useTransform(scrollYProgress, [0.08, 0.3], [0, 150]);
@@ -82,11 +81,13 @@ export default function CaseStudyIntro() {
     <section
       ref={sectionRef}
       id="case-study"
-      className="relative bg-black text-resort min-[1025px]:h-[400vh]"
+      className="relative bg-black text-resort h-[300vh] min-[1025px]:h-[400vh]"
       aria-label="Case study introduction"
     >
-      {/* DESKTOP — pinned, scroll-driven choreography */}
-      <div className="sticky top-0 hidden h-screen flex-col items-center justify-center overflow-hidden px-6 min-[1025px]:flex">
+      {/* Pinned, scroll-driven choreography — identical on mobile & desktop:
+          the checkered disc irises open, the headline is written letter by
+          letter, then the Tolaab card slides in from the right. */}
+      <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden px-6">
         {/* growing checkered disc */}
         <motion.div
           aria-hidden="true"
@@ -131,24 +132,9 @@ export default function CaseStudyIntro() {
         </motion.div>
 
         {/* the case-study card slides STRAIGHT in from the right and lands centre */}
-        <div className="absolute inset-0 z-20 flex items-center justify-center px-6 pt-[52px] min-[1025px]:pt-0">
+        <div className="absolute inset-0 z-20 flex items-center justify-center px-6 pt-[44px] min-[1025px]:pt-0">
           <ProjectCard data={CASE} progress={scrollYProgress} />
         </div>
-      </div>
-
-      {/* MOBILE — static, fully-visible card in normal document flow so the
-          stacked layout (video + all three sections, incl. "The Result") is
-          never clipped by the pinned h-screen stage. */}
-      <div className="flex flex-col items-center gap-8 px-6 py-20 min-[1025px]:hidden">
-        <div className="flex flex-col items-center text-center">
-          <span className="font-display text-[34px] font-medium uppercase leading-[1.1] text-white">
-            {eyebrow}
-          </span>
-          <span className="mx-auto mt-3 block max-w-[22ch] font-body text-[16px] font-light leading-[1.35] text-white/55">
-            {headline}
-          </span>
-        </div>
-        <ProjectCard data={CASE} progress={scrollYProgress} animate={false} />
       </div>
     </section>
   );
@@ -157,18 +143,14 @@ export default function CaseStudyIntro() {
 function ProjectCard({
   data,
   progress,
-  animate = true,
 }: {
   data: CaseCfg;
   progress: MotionValue<number>;
-  /** when false (mobile) the card just sits in place, no scroll-driven slide */
-  animate?: boolean;
 }) {
   // straight right-to-left slide to dead centre
-  const xAnim = useTransform(progress, [data.start, data.end], ["115vw", "0vw"], {
+  const x = useTransform(progress, [data.start, data.end], ["115vw", "0vw"], {
     clamp: true,
   });
-  const x = animate ? xAnim : 0;
 
   // gentle cursor tilt — the point under the cursor dips slightly inward
   const tiltX = useMotionValue(0);
@@ -204,8 +186,8 @@ function ProjectCard({
       {/* left — Tolaab video: compact 16:9 on mobile, full-height side video on
           desktop. The video is absolute so it can't stretch the frame to its own
           (portrait) aspect — the box height comes purely from aspect-video. */}
-      <div className="w-full shrink-0 p-4 min-[1025px]:h-full min-[1025px]:w-[36%] min-[1025px]:p-5">
-        <div className="relative aspect-[2/1] w-full overflow-hidden rounded-[1.5rem] min-[1025px]:aspect-auto min-[1025px]:h-full">
+      <div className="w-full shrink-0 p-3 min-[1025px]:h-full min-[1025px]:w-[36%] min-[1025px]:p-5">
+        <div className="relative aspect-[5/2] w-full overflow-hidden rounded-[1.5rem] min-[1025px]:aspect-auto min-[1025px]:h-full">
           <video
             src={data.video}
             autoPlay
@@ -219,18 +201,18 @@ function ProjectCard({
       </div>
 
       {/* right — project title, then The Challenge / Our Solution / The Result */}
-      <div className="flex min-w-0 flex-1 flex-col space-y-3 p-4 pb-6 min-[1025px]:space-y-5 min-[1025px]:p-10">
-        <h3 className="font-display text-[20px] font-medium uppercase leading-[1.3] text-resort min-[1025px]:text-[32px] min-[1025px]:leading-[1.2]">
+      <div className="flex min-w-0 flex-1 flex-col space-y-2 p-4 pb-4 min-[1025px]:space-y-5 min-[1025px]:p-10">
+        <h3 className="font-display text-[17px] font-medium uppercase leading-[1.2] text-resort min-[1025px]:text-[32px] min-[1025px]:leading-[1.2]">
           {data.title}
         </h3>
 
-        <div className="mt-4 flex flex-col gap-3 min-[1025px]:mt-[44px] min-[1025px]:gap-5">
+        <div className="mt-2 flex flex-col gap-2 min-[1025px]:mt-[44px] min-[1025px]:gap-5">
           {data.sections.map((section) => (
             <div key={section.heading}>
-              <h4 className="font-body text-[16px] font-normal leading-[1.3] tracking-[0.08em] text-stone min-[1025px]:text-[16px]">
+              <h4 className="font-body text-[13px] font-normal leading-[1.25] tracking-[0.08em] text-stone min-[1025px]:text-[16px]">
                 {section.heading}
               </h4>
-              <p className="mt-1.5 font-body font-normal tracking-[0.04em] text-stone/80 text-[14px] leading-[1.5] min-[1025px]:leading-relaxed">
+              <p className="mt-0.5 font-body font-normal tracking-[0.04em] text-stone/80 text-[12.5px] leading-[1.4] min-[1025px]:mt-1.5 min-[1025px]:text-[14px] min-[1025px]:leading-relaxed">
                 {section.body}
               </p>
             </div>
