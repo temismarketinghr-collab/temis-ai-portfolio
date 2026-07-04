@@ -58,10 +58,11 @@ export default function CaseStudyIntro() {
     offset: ["start start", "end end"],
   });
 
-  // NOTE: all motion hooks must run UNCONDITIONALLY (Rules of Hooks) — they
-  // sit above the mobile early-return so the hook count never changes when
-  // `isDesktop` flips across the 768px breakpoint (otherwise React crashes and
-  // the whole section vanishes).
+  // NOTE: all motion hooks must run UNCONDITIONALLY (Rules of Hooks). We split
+  // desktop vs mobile with CSS visibility (not a JS early-return), so the hook
+  // count never changes across the breakpoint. Desktop gets the pinned,
+  // scroll-driven choreography below; mobile renders a plain in-flow card that
+  // can't be clipped by the h-screen stage.
 
   // A circle reveals a CRISP, fixed-resolution grid (clip-path, not scale).
   const circleRadius = useTransform(scrollYProgress, [0.08, 0.3], [0, 150]);
@@ -81,10 +82,11 @@ export default function CaseStudyIntro() {
     <section
       ref={sectionRef}
       id="case-study"
-      className="relative h-[620vh] bg-black text-resort"
+      className="relative bg-black text-resort min-[1025px]:h-[400vh]"
       aria-label="Case study introduction"
     >
-      <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden px-6">
+      {/* DESKTOP — pinned, scroll-driven choreography */}
+      <div className="sticky top-0 hidden h-screen flex-col items-center justify-center overflow-hidden px-6 min-[1025px]:flex">
         {/* growing checkered disc */}
         <motion.div
           aria-hidden="true"
@@ -132,6 +134,21 @@ export default function CaseStudyIntro() {
         <div className="absolute inset-0 z-20 flex items-center justify-center px-6 pt-[52px] min-[1025px]:pt-0">
           <ProjectCard data={CASE} progress={scrollYProgress} />
         </div>
+      </div>
+
+      {/* MOBILE — static, fully-visible card in normal document flow so the
+          stacked layout (video + all three sections, incl. "The Result") is
+          never clipped by the pinned h-screen stage. */}
+      <div className="flex flex-col items-center gap-8 px-6 py-20 min-[1025px]:hidden">
+        <div className="flex flex-col items-center text-center">
+          <span className="font-display text-[34px] font-medium uppercase leading-[1.1] text-white">
+            {eyebrow}
+          </span>
+          <span className="mx-auto mt-3 block max-w-[22ch] font-body text-[16px] font-light leading-[1.35] text-white/55">
+            {headline}
+          </span>
+        </div>
+        <ProjectCard data={CASE} progress={scrollYProgress} animate={false} />
       </div>
     </section>
   );
