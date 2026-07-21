@@ -172,42 +172,18 @@ export default function ProjectsPage() {
         count={VISUALS.length}
         blurb="Brand imagery, product shots and campaign keyframes."
       >
-        {/* Render visuals in groups of 4 with section headers */}
-        {Array.from({ length: Math.ceil(shownVisuals.length / 4) }).map(
-          (_, groupIndex) => {
-            const start = groupIndex * 4;
-            const end = Math.min(start + 4, shownVisuals.length);
-            const group = shownVisuals.slice(start, end);
-
-            return (
-              <div key={`group-${groupIndex}`} className="space-y-9 md:space-y-12">
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-4">
-                  {group.map((v, i) => (
-                    <VisualCard
-                      key={v.src}
-                      visual={v}
-                      onOpen={() =>
-                        setActive({ kind: "image", index: start + i })
-                      }
-                    />
-                  ))}
-                </div>
-
-                {/* Section header after every 4 cards (except the last group) */}
-                {end < shownVisuals.length && (
-                  <div className="border-b border-resort/10 pb-5">
-                    <h3 className="font-display text-[26px] font-medium leading-[1.3] text-white uppercase min-[1025px]:text-[clamp(2rem,7vw,56px)] min-[1025px]:leading-[1.05]">
-                      Marketing
-                    </h3>
-                    <p className="mt-2.5 font-body text-[16px] leading-[1.2] text-white/50 min-[1025px]:mt-3 min-[1025px]:text-[clamp(0.95rem,2.5vw,24px)] min-[1025px]:leading-relaxed">
-                      Reels cover for an Agency
-                    </p>
-                  </div>
-                )}
-              </div>
-            );
-          }
-        )}
+        {/* each card animates on its OWN mount (not via a staggered container
+            or whileInView) — so cards added by "Load More" reliably fade in
+            while the first 8 are left untouched (no re-flash) */}
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-4">
+          {shownVisuals.map((v, i) => (
+            <VisualCard
+              key={v.src}
+              visual={v}
+              onOpen={() => setActive({ kind: "image", index: i })}
+            />
+          ))}
+        </div>
 
         {VISUALS.length > VISUALS_PER_PAGE && (
           <div className="mt-10 flex justify-center md:mt-12">
