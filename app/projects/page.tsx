@@ -52,10 +52,10 @@ const VISUALS: Visual[] = [
   { src: "/gallery/img10.jpg", sub: "Instagram Story", tag: "Story for Valor", n: "10" },
   { src: "/gallery/img11.jpg", sub: "AI-generated Product", tag: "Image for Valor", n: "11" },
   { src: "/gallery/15.png", sub: "Marketing image for Azcension", tag: "Design for Azcension", n: "12" },
-  { src: "/gallery/16.jpg", sub: "Campaign Image", tag: "Project 16", n: "13" },
-  { src: "/gallery/17.jpg", sub: "Campaign Image", tag: "Project 17", n: "14" },
-  { src: "/gallery/18.jpg", sub: "Campaign Image", tag: "Project 18", n: "15" },
-  { src: "/gallery/19.jpg", sub: "Campaign Image", tag: "Project 19", n: "16" },
+  { src: "/gallery/16.jpg", sub: "Reels cover for an Agency", tag: "marketing", n: "13" },
+  { src: "/gallery/17.jpg", sub: "Reels cover for an Agency", tag: "marketing", n: "14" },
+  { src: "/gallery/18.jpg", sub: "Reels cover for an Agency", tag: "marketing", n: "15" },
+  { src: "/gallery/19.jpg", sub: "Reels cover for an Agency", tag: "marketing", n: "16" },
 ];
 
 const container: Variants = {
