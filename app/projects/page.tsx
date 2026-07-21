@@ -30,26 +30,32 @@ type Visual = {
 };
 
 const VIDEOS: Video[] = [
-  { src: "/video/reel-dubai.mp4", title: "Video for Vitole", tag: "Health", n: "01", cover: "/gallery/img15.png" },
-  { src: "/video/reel-fnb.mp4", title: "Reel/Story for Valor", tag: "Skincare", n: "02" },
-  { src: "/video/reel-skincare.mp4", title: "Reel/Story for Valor", tag: "Skincare", n: "03" },
-  { src: "/video/reel-fitness.mp4", title: "Ads for an Agency", tag: "Digital Marketing", n: "04" },
-  { src: "/video/tolaab.mp4", title: "Video for Tolaab", tag: "Training", n: "05" },
+  { src: "/video/reel-dubai.mp4", title: "Video for Vitole", tag: "Meta Ads Video", n: "01", cover: "/gallery/img15.png" },
+  { src: "/video/reel-fnb.mp4", title: "Reel/Story for Valor", tag: "Instagram Reel/Story", n: "02" },
+  { src: "/video/reel-skincare.mp4", title: "Reel/Story for Valor", tag: "Instagram Reel/Story", n: "03" },
+  { src: "/video/reel-fitness.mp4", title: "Ads for an Agency", tag: "Ads", n: "04" },
+  { src: "/video/tolaab.mp4", title: "Video for Tolaab", tag: "Video Creation", n: "05" },
+  { src: "/video/Aqua Brush.MP4", title: "Reel/Story for Valor", tag: "Instagram Reel/Story", n: "06" },
+  { src: "/video/Velvet Hair.mp4", title: "Velvet Hair", tag: "Product Demo", n: "07" },
 ];
 
 const VISUALS: Visual[] = [
-  { src: "/gallery/img1.jpg", sub: "Skincare", tag: "Product image for Valor", n: "01" },
-  { src: "/gallery/img2.jpg", sub: "Wellness", tag: "Product image for B'Rave", n: "02" },
-  { src: "/gallery/img3.jpg", sub: "Sport", tag: "Product image for Hirostar", n: "03" },
-  { src: "/gallery/img4.jpg", sub: "Health", tag: "Poster for Vitole", n: "04" },
-  { src: "/gallery/img5.jpg", sub: "Medical", tag: "Story for Vitole", n: "05" },
-  { src: "/gallery/img6.jpg", sub: "Digital marketing", tag: "Instagram Reel", n: "06" },
-  { src: "/gallery/img7.jpg", sub: "Health", tag: "Poster for Vitole", n: "07" },
-  { src: "/gallery/img8.jpg", sub: "Food", tag: "Poster for Pure Plate", n: "08" },
-  { src: "/gallery/img9.jpg", sub: "Beauty", tag: "Story for Vitole", n: "09" },
-  { src: "/gallery/img10.jpg", sub: "Skincare", tag: "Story for Valor", n: "10" },
-  { src: "/gallery/img11.jpg", sub: "Skincare", tag: "Product image for valor", n: "11" },
-  { src: "/gallery/15.png", sub: "Real estate", tag: "marketing image for Azcension", n: "12" },
+  { src: "/gallery/img1.jpg", sub: "AI-generated Product", tag: "Product image for Valor", n: "01" },
+  { src: "/gallery/img2.jpg", sub: "AI-generated Product", tag: "Product image for B'Rave", n: "02" },
+  { src: "/gallery/img3.jpg", sub: "AI-generated Product", tag: "Product image for Hirostar", n: "03" },
+  { src: "/gallery/img4.jpg", sub: "Meta Ads Poster", tag: "Poster for Vitole", n: "04" },
+  { src: "/gallery/img5.jpg", sub: "Instagram Story", tag: "Story for Vitole", n: "05" },
+  { src: "/gallery/img6.jpg", sub: "Reel cover design", tag: "Instagram Reel", n: "06" },
+  { src: "/gallery/img7.jpg", sub: "Meta Ads Poster", tag: "Poster for Vitole", n: "07" },
+  { src: "/gallery/img8.jpg", sub: "Meta Ads Poster", tag: "Poster for Pure Plate", n: "08" },
+  { src: "/gallery/img9.jpg", sub: "Instagram Story", tag: "Story for Vitole", n: "09" },
+  { src: "/gallery/img10.jpg", sub: "Instagram Story", tag: "Story for Valor", n: "10" },
+  { src: "/gallery/img11.jpg", sub: "AI-generated Product", tag: "Image for Valor", n: "11" },
+  { src: "/gallery/15.png", sub: "Marketing image for Azcension", tag: "Design for Azcension", n: "12" },
+  { src: "/gallery/16.jpg", sub: "Campaign Image", tag: "Project 16", n: "13" },
+  { src: "/gallery/17.jpg", sub: "Campaign Image", tag: "Project 17", n: "14" },
+  { src: "/gallery/18.jpg", sub: "Campaign Image", tag: "Project 18", n: "15" },
+  { src: "/gallery/19.jpg", sub: "Campaign Image", tag: "Project 19", n: "16" },
 ];
 
 const container: Variants = {
@@ -70,13 +76,18 @@ type Active = { kind: "video" | "image"; index: number };
 
 /** how many static cards show before "Load More" */
 const VISUALS_PER_PAGE = 8;
+const VIDEOS_PER_PAGE = 8;
 
 export default function ProjectsPage() {
   const [active, setActive] = useState<Active | null>(null);
   const [visualsExpanded, setVisualsExpanded] = useState(false);
+  const [videosExpanded, setVideosExpanded] = useState(false);
   const shownVisuals = visualsExpanded
     ? VISUALS
     : VISUALS.slice(0, VISUALS_PER_PAGE);
+  const shownVideos = videosExpanded
+    ? VIDEOS
+    : VIDEOS.slice(0, VIDEOS_PER_PAGE);
 
   // move forward/back within the open gallery, wrapping around the ends
   const step = useCallback((dir: number) => {
@@ -115,7 +126,7 @@ export default function ProjectsPage() {
           viewport={{ once: true, amount: 0.12 }}
           className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-4"
         >
-          {VIDEOS.map((v, i) => (
+          {shownVideos.map((v, i) => (
             <VideoCard
               key={v.src}
               video={v}
@@ -123,6 +134,36 @@ export default function ProjectsPage() {
             />
           ))}
         </motion.div>
+
+        {VIDEOS.length > VIDEOS_PER_PAGE && (
+          <div className="mt-10 flex justify-center md:mt-12">
+            <button
+              type="button"
+              onClick={() => setVideosExpanded((v) => !v)}
+              className="group inline-flex items-center gap-2.5 border-b border-resort/30 pb-1 font-body text-sm text-resort transition-colors hover:border-resort/60 hover:text-resort/80"
+            >
+              Load More
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                className={`h-4 w-4 transition-transform duration-300 ${
+                  videosExpanded
+                    ? "rotate-180"
+                    : "group-hover:translate-y-0.5"
+                }`}
+              >
+                <path
+                  d="M6 9l6 6 6-6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
       </Section>
 
       <Section
@@ -131,18 +172,42 @@ export default function ProjectsPage() {
         count={VISUALS.length}
         blurb="Brand imagery, product shots and campaign keyframes."
       >
-        {/* each card animates on its OWN mount (not via a staggered container
-            or whileInView) — so cards added by "Load More" reliably fade in
-            while the first 8 are left untouched (no re-flash) */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-4">
-          {shownVisuals.map((v, i) => (
-            <VisualCard
-              key={v.src}
-              visual={v}
-              onOpen={() => setActive({ kind: "image", index: i })}
-            />
-          ))}
-        </div>
+        {/* Render visuals in groups of 4 with section headers */}
+        {Array.from({ length: Math.ceil(shownVisuals.length / 4) }).map(
+          (_, groupIndex) => {
+            const start = groupIndex * 4;
+            const end = Math.min(start + 4, shownVisuals.length);
+            const group = shownVisuals.slice(start, end);
+
+            return (
+              <div key={`group-${groupIndex}`} className="space-y-9 md:space-y-12">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-4">
+                  {group.map((v, i) => (
+                    <VisualCard
+                      key={v.src}
+                      visual={v}
+                      onOpen={() =>
+                        setActive({ kind: "image", index: start + i })
+                      }
+                    />
+                  ))}
+                </div>
+
+                {/* Section header after every 4 cards (except the last group) */}
+                {end < shownVisuals.length && (
+                  <div className="border-b border-resort/10 pb-5">
+                    <h3 className="font-display text-[26px] font-medium leading-[1.3] text-white uppercase min-[1025px]:text-[clamp(2rem,7vw,56px)] min-[1025px]:leading-[1.05]">
+                      Marketing
+                    </h3>
+                    <p className="mt-2.5 font-body text-[16px] leading-[1.2] text-white/50 min-[1025px]:mt-3 min-[1025px]:text-[clamp(0.95rem,2.5vw,24px)] min-[1025px]:leading-relaxed">
+                      Reels cover for an Agency
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          }
+        )}
 
         {VISUALS.length > VISUALS_PER_PAGE && (
           <div className="mt-10 flex justify-center md:mt-12">
@@ -226,7 +291,7 @@ function Hero() {
         </motion.h1>
         <motion.p
           variants={item}
-          className="mt-6 font-body text-[clamp(0.95rem,2.5vw,24px)] font-light leading-[1.4] text-white/55 tracking-[0.02em] min-[1025px]:whitespace-nowrap"
+          className="mt-6 font-body text-[clamp(0.95rem,2.5vw,24px)] font-light leading-[1.4] text-white/55 min-[1025px]:whitespace-nowrap"
           style={{ fontWeight: 300 }}
         >
           A growing collection of AI-generated motion and static projects, each
@@ -267,7 +332,7 @@ function Section({
             {title}
           </h2>
           <p
-            className="mt-2.5 max-w-md font-body text-[16px] leading-[1.2] text-white/50 tracking-[0.02em] min-[1025px]:mt-3 min-[1025px]:text-[clamp(0.95rem,2.5vw,24px)] min-[1025px]:leading-relaxed min-[1025px]:whitespace-nowrap"
+            className="mt-2.5 max-w-md font-body text-[16px] leading-[1.2] text-white/50 min-[1025px]:mt-3 min-[1025px]:text-[clamp(0.95rem,2.5vw,24px)] min-[1025px]:leading-relaxed min-[1025px]:whitespace-nowrap"
             style={{ fontWeight: 300 }}
           >
             {blurb}
@@ -340,7 +405,7 @@ function VideoCard({ video, onOpen }: { video: Video; onOpen: () => void }) {
       <ExpandHint />
 
       <div className="absolute inset-x-4 bottom-4">
-        <p className="font-body text-[12px] font-semibold uppercase tracking-[0.2em] text-white/70">
+        <p className="font-body text-[0.7rem] font-semibold uppercase tracking-[0.03em] text-white/70">
           {video.tag}
         </p>
         <h3 className="mt-1 font-display text-lg font-bold uppercase leading-tight text-white">
@@ -379,7 +444,7 @@ function VisualCard({ visual, onOpen }: { visual: Visual; onOpen: () => void }) 
       <ExpandHint />
 
       <figcaption className="absolute inset-x-4 bottom-4">
-        <p className="font-body text-[12px] font-semibold uppercase tracking-[0.2em] text-white/70">
+        <p className="font-body text-[0.7rem] font-semibold uppercase tracking-[0.03em] text-white/70">
           {visual.sub ?? "Visual"}
         </p>
         <h3 className="mt-1 font-display text-lg font-bold uppercase leading-tight text-white">

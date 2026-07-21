@@ -28,28 +28,68 @@ type CaseCfg = {
   end: number;
 };
 
-const CASE: CaseCfg = {
-  title: "Tolaab Bowling Training Video",
-  video: "/video/tolaab.mp4",
-  sections: [
-    {
-      heading: "The Challenge",
-      body: "Tolaab needed a bowling training video, but filming new footage wasn't possible. I only had a few photos of the venue, most of which included visitors and were captured from limited angles.",
-
-    },
-    {
-      heading: "My Solution",
-      body: "To create a more engaging learning experience, I used AI to generate the opening scenes of the video, making the content both visually appealing and educational. I then removed unwanted people from the existing images, generated new viewpoints based on the available photos, and transformed the scenes into dynamic video content.",
-
-    },
-    {
-      heading: "The Result",
-      body: "A complete educational bowling video created without a single day of filming, saving time, reducing production costs, and turning a handful of photos into a professional training experience.",
-    },
-  ],
-  start: 0.64,
-  end: 0.8,
-};
+const CASES: CaseCfg[] = [
+  {
+    title: "Tolaab Bowling Training Video",
+    video: "/video/tolaab.mp4",
+    sections: [
+      {
+        heading: "The Challenge",
+        body: "Tolaab needed a bowling training video, but filming new footage wasn't possible. I only had a few photos of the venue, most of which included visitors and were captured from limited angles.",
+      },
+      {
+        heading: "My Solution",
+        body: "To create a more engaging learning experience, I used AI to generate the opening scenes of the video, making the content both visually appealing and educational. I then removed unwanted people from the existing images, generated new viewpoints based on the available photos, and transformed the scenes into dynamic video content.",
+      },
+      {
+        heading: "The Result",
+        body: "A complete educational bowling video created without a single day of filming, saving time, reducing production costs, and turning a handful of photos into a professional training experience.",
+      },
+    ],
+    start: 0.6,
+    end: 0.7,
+  },
+  {
+    title: "Promotional Video for Hirostar",
+    video: "/video/hirostar.mp4",
+    sections: [
+      {
+        heading: "The Challenge",
+        body: "The client needed a promotional video for an upcoming padel tournament on a very tight deadline. They wanted eye-catching, CGI-style visuals that would stand out on social media, but there wasn't enough time or budget for a traditional CGI production.",
+      },
+      {
+        heading: "My Solution",
+        body: "I used AI-powered creative tools to produce cinematic, CGI-inspired visuals much faster than a traditional workflow. This allowed me to deliver a high-quality promotional video that matched the client's vision while staying on schedule and within budget.",
+      },
+      {
+        heading: "The Result",
+        body: "The final video was delivered on time and used across the client's social media campaign, helping generate excitement for the tournament with premium-looking visuals while significantly reducing production time and cost.",
+      },
+    ],
+    start: 0.76,
+    end: 0.86,
+  },
+  {
+    title: "Promotional Video for Vitole",
+    video: "/video/vitole.mp4",
+    sections: [
+      {
+        heading: "The Challenge",
+        body: "The client wanted promotional videos for their medical scrubs but didn't have the budget, models, or filming location to produce them. They also wanted the videos to closely match reference videos featuring real people wearing the scrubs in different colors.",
+      },
+      {
+        heading: "My Solution",
+        body: "I used the product images from the client's website together with AI-powered video generation to create realistic promotional videos. By following the reference style, I was able to showcase the scrubs naturally on human models in multiple color variations without the need for a traditional photoshoot or video production.",
+      },
+      {
+        heading: "The Result",
+        body: "The client received high-quality promotional videos that closely matched their creative vision, allowing them to market multiple product variations quickly while saving both production time and costs.",
+      },
+    ],
+    start: 0.9,
+    end: 0.97,
+  },
+];
 
 export default function CaseStudyIntro() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -81,7 +121,7 @@ export default function CaseStudyIntro() {
     <section
       ref={sectionRef}
       id="case-study"
-      className="relative bg-black text-resort h-[300vh] min-[1025px]:h-[400vh]"
+      className="relative bg-black text-resort h-[460vh] min-[1025px]:h-[640vh]"
       aria-label="Case study introduction"
     >
       {/* Pinned, scroll-driven choreography — identical on mobile & desktop:
@@ -131,9 +171,18 @@ export default function CaseStudyIntro() {
           />
         </motion.div>
 
-        {/* the case-study card slides STRAIGHT in from the right and lands centre */}
-        <div className="absolute inset-0 z-20 flex items-center justify-center px-6 pt-[44px] min-[1025px]:pt-0">
-          <ProjectCard data={CASE} progress={scrollYProgress} />
+        {/* the case-study cards slide STRAIGHT in from the right, one after the
+            other, each landing centre and stacking on top of the previous */}
+        <div className="absolute inset-0 z-20">
+          {CASES.map((c, i) => (
+            <div
+              key={c.title}
+              className="pointer-events-none absolute inset-0 flex items-center justify-center px-6 pt-[44px] min-[1025px]:pt-0"
+              style={{ zIndex: i }}
+            >
+              <ProjectCard data={c} progress={scrollYProgress} />
+            </div>
+          ))}
         </div>
       </div>
     </section>
