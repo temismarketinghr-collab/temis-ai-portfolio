@@ -420,9 +420,6 @@ function VisualCard({ visual, onOpen }: { visual: Visual; onOpen: () => void }) 
       <ExpandHint />
 
       <figcaption className="absolute inset-x-4 bottom-4">
-        <p className="font-body text-[0.7rem] font-semibold uppercase tracking-[0.03em] text-white/70">
-          {visual.sub ?? "Visual"}
-        </p>
         <h3 className="mt-1 font-display text-lg font-bold uppercase leading-tight text-white">
           {visual.tag}
         </h3>
